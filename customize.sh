@@ -6,6 +6,10 @@ sed -i 's/192.168.1.1/192.168.10.12/g' openwrt/package/base-files/files/bin/conf
 # Modify default theme
 #sed -i 's/luci-theme-bootstrap/luci-theme-argon/g' feeds/luci/collections/luci/Makefile
 
+# 增加软件
+git clone https://github.com/kenzok8/luci-app-ddns-go.git package/luci-app-ddns-go
+git clone https://github.com/kenzok8/luci-app-dockerman.git package/luci-app-dockerman
+
 # Modify hostname
 #sed -i 's/OpenWrt/kenzo/g' package/base-files/files/bin/config_generate
 

@@ -82,11 +82,7 @@ jobs:
         sudo mkdir -p -m 777 /mnt/openwrt/dl /mnt/openwrt/bin /mnt/openwrt/staging_dir
         ln -sf /mnt/openwrt/dl openwrt/dl
         ln -sf /mnt/openwrt/bin openwrt/bin
-        ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir
-
-    - name: SSH远程连接（make menuconfig）
-      if: env.SSH_ACTION == 'true'
-      uses: danshui-git/debugger-action@main        
+        ln -sf /mnt/openwrt/staging_dir openwrt/staging_dir       
 
     - name: Update feeds
       working-directory: ./openwrt
@@ -111,6 +107,13 @@ jobs:
         sed -i 's#GO_PKG_TARGET_VARS.*# #g' feeds/packages/utils/v2dat/Makefile 
         ./scripts/feeds install -a
         cp -f feeds/smpackage/.github/diy/${{matrix.target}}.config .config && make defconfig
+
+    - name: SSH connection to Actions
+      uses: P3TERX/ssh2actions@v1.0.0
+      if: (github.event.inputs.ssh == 'true' && github.event.inputs.ssh  != 'false') || contains(github.event.action, 'ssh')
+      env:
+        TELEGRAM_CHAT_ID: ${{ secrets.TELEGRAM_CHAT_ID }}
+        TELEGRAM_BOT_TOKEN: ${{ secrets.TELEGRAM_BOT_TOKEN }}
         
     - name: Download package
       working-directory: ./openwrt
